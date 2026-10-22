@@ -81,6 +81,8 @@ INSTALLED_APPS = (
 MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
@@ -209,10 +211,6 @@ POSTMARK_API_KEY = os.getenv('POSTMARK_API_KEY')
 if not POSTMARK_API_KEY:
     print('WARNING: without a POSTMARK_API_KEY you cannot send emails')
 
-WEBHOOK_SECRET_KEY = os.getenv('WEBHOOK_SECRET_KEY')
-if not WEBHOOK_SECRET_KEY:
-    print('WARNING: without a WEBHOOK_SECRET_KEY you cannot receive webhooks')
-
 EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')
@@ -269,5 +267,4 @@ LOGGING = {
 if DEBUG:
     print('-'*75)
     print('SITE_DOMAIN is set to %s' % SITE_DOMAIN)
-    print("If you're using webhooks locally, be sure this is correct")
     print('-'*75)

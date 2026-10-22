@@ -3,7 +3,6 @@ from django.conf.urls import url
 from addresses import views as addresses_views
 from blocks import views as blocks_views
 from homepage import views as homepage_views
-from metadata import views as metadata_views
 from transactions import views as transactions_views
 from users import views as users_views
 from wallets import views as wallets_views
@@ -25,18 +24,10 @@ urlpatterns = [
     url(r'^change-password/?$', users_views.change_password, name='change_password'),
     url(r'^forgot-password/?$', users_views.forgot_password, name='forgot_password'),
     url(r'^reset-pw/(?P<verif_code>[-\w@.+]+)?$', users_views.reset_pw, name='reset_pw'),
-    url(r'^unsubscribe/(?P<unsub_code>[-\w]+)/$', addresses_views.unsubscribe_address, name='unsubscribe_address'),
-    url(r'^remove-subscription/(?P<address_subscription_id>[-\w]+)/$', addresses_views.user_unsubscribe_address, name='user_unsubscribe_address'),
-    url(r'^archive-forwarding-address/(?P<address_forwarding_id>[-\w]+)/$', addresses_views.user_archive_forwarding_address, name='user_archive_forwarding_address'),
     url(r'^dashboard/?$', users_views.dashboard, name='dashboard'),
-
-    # Webhooks:
-    url(r'^address-webhook/(?P<secret_key>[-\w]+)/(?P<ignored_key>[-\w]+)?$', addresses_views.address_webhook, name='address_webhook'),
 
     # App pages
     url(r'^$', homepage_views.home, name='home'),
-    url(r'^(?P<coin_symbol>[-\w]+)/forwarding/$', addresses_views.setup_address_forwarding, name='setup_address_forwarding'),
-    url(r'^(?P<coin_symbol>[-\w]+)/subscribe/$', addresses_views.subscribe_address, name='subscribe_address'),
     url(r'^(?P<coin_symbol>[-\w]+)/address/(?P<address>[-\w]+)/$', addresses_views.address_overview, name='address_overview'),
     url(r'^(?P<coin_symbol>[-\w]+)/address/(?P<address>[-\w]+)/(?P<wallet_name>[-\w\.]+)/$', addresses_views.address_overview, name='address_overview'),
     url(r'^(?P<coin_symbol>[-\w]+)/tx/(?P<tx_hash>[-\w]+)/$', transactions_views.transaction_overview, name='transaction_overview'),
@@ -44,13 +35,9 @@ urlpatterns = [
     url(r'^(?P<coin_symbol>[-\w]+)/xpub/(?P<pubkey>[-\w]+)/$', wallets_views.wallet_overview, name='wallet_overview_default'),
     url(r'^(?P<coin_symbol>[-\w]+)/pushtx/$', transactions_views.push_tx, name='push_tx'),
     url(r'^(?P<coin_symbol>[-\w]+)/decodetx/$', transactions_views.decode_tx, name='decode_tx'),
-    url(r'^(?P<coin_symbol>[-\w]+)/metadata/address/(?P<address>[-\w]+)/$', metadata_views.add_metadata_to_address, name='add_metadata_to_address'),
-    url(r'^(?P<coin_symbol>[-\w]+)/metadata/tx/(?P<tx_hash>[-\w]+)/$', metadata_views.add_metadata_to_tx, name='add_metadata_to_tx'),
-    url(r'^(?P<coin_symbol>[-\w]+)/metadata/block/(?P<block_hash>[-\w]+)/$', metadata_views.add_metadata_to_block, name='add_metadata_to_block'),
     url(r'^highlights/$', homepage_views.highlights, name='highlights'),
     # AJAX calls
     url(r'^(?P<coin_symbol>[-\w]+)/tx-confidence/(?P<tx_hash>[-\w]+)/$', transactions_views.poll_confidence, name='poll_confidence'),
-    url(r'^metadata/(?P<coin_symbol>[-\w]+)/(?P<identifier_type>[\w]+)/(?P<identifier>[-\w]+)/$', metadata_views.poll_metadata, name='poll_metadata'),
 
     # Widget
     url(r'^widgets/(?P<coin_symbol>[-\w]+)/?$', addresses_views.search_widgets, name='search_widgets'),
@@ -60,12 +47,8 @@ urlpatterns = [
 
     # Forwarding Pages (URL hacks)
     url(r'^widgets/$', addresses_views.widget_forwarding, name='widget_forwarding'),
-    url(r'^forwarding/$',addresses_views.forward_forwarding, name='forward_forwarding'),  # awesome name
-    url(r'^subscribe/$', addresses_views.subscribe_forwarding, name='subscribe_forwarding'),
     url(r'^pushtx/$', transactions_views.pushtx_forwarding, name='pushtx_forwarding'),
     url(r'^decodetx/$', transactions_views.decodetx_forwarding, name='decodetx_forwarding'),
-    url(r'^metadata/$', metadata_views.metadata_forwarding, name='metadata_forwarding'),
-    url(r'^(?P<coin_symbol>[-\w]+)/metadata/$', metadata_views.add_metadata, name='add_metadata'),
     url(r'^latest-block/$', blocks_views.latest_block_forwarding, name='latest_block_forwarding'),
     url(r'^(?P<coin_symbol>[-\w]+)/latest-block/$', blocks_views.latest_block, name='latest_block'),
     url(r'^latest-unconfirmed-tx/$', transactions_views.latest_unconfirmed_tx_forwarding, name='latest_unconfirmed_tx_forwarding'),
